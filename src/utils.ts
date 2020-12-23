@@ -9,13 +9,16 @@ export const isValidCountryCode = (
 export const validatePhoneNumber = (
   phoneNumber: string | undefined,
   countryCode = ValidCountry.US
-): boolean => {
+): { isValid: boolean; errorMessage: string } => {
   if (!phoneNumber) {
-    return false
+    return { isValid: false, errorMessage: 'No phone number provided' }
   }
 
   if (!isValidCountryCode(countryCode)) {
-    return false
+    return {
+      isValid: false,
+      errorMessage: 'Country is not currently supported'
+    }
   }
 
   const parsedPhoneNumber = parsePhoneNumberWithError(
@@ -24,8 +27,22 @@ export const validatePhoneNumber = (
   )
 
   if (!parsedPhoneNumber.isPossible()) {
-    return false
+    return {
+      isValid: false,
+      errorMessage:
+        'Not a valid phone number, failed at either the phone number length or matching any regular expressions'
+    }
   }
 
-  return parsedPhoneNumber.isValid()
+  if (parsedPhoneNumber.country !== countryCode) {
+    return {
+      isValid: false,
+      errorMessage: `The country code for this phone number (${parsedPhoneNumber.country}) does not match the provided country (${countryCode})`
+    }
+  }
+
+  return {
+    isValid: parsedPhoneNumber.isValid(),
+    errorMessage: 'Invalid phone number'
+  }
 }

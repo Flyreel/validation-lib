@@ -28,7 +28,7 @@ export enum ValidCountry {
   CA = 'CA'
 }
 
-type CreateInspectionRequiredFields = {
+type RequiredInspectionFields = {
   address1: string
   carrier_expiration: string
   expiration: string
@@ -46,7 +46,7 @@ type CreateInspectionRequiredFields = {
   zip_code: string
 }
 
-type CreateInspectionOptionalFields = Partial<{
+type OptionalInspectionFields = Partial<{
   address2: string
   agent_email: string
   agent_name: string
@@ -58,19 +58,14 @@ type CreateInspectionOptionalFields = Partial<{
   longitude: number
 }>
 
-export type CreateInspectionRequestBody = CreateInspectionRequiredFields &
-  CreateInspectionOptionalFields
+export type InspectionToBeValidated = RequiredInspectionFields &
+  OptionalInspectionFields
 
 type ValidatorFn<T> = (
   message?: string | Record<string | number | symbol, unknown> | undefined
 ) => T
 
 export interface CustomStringSchema extends Yup.StringSchema {
-  isCAPhone: ValidatorFn<this>
-  isCAPostalCode: ValidatorFn<this>
-  isPhone: ValidatorFn<this>
-  isUSPhone: ValidatorFn<this>
-  isUSPostalCode: ValidatorFn<this>
   isUrl: ValidatorFn<this>
 }
 
@@ -81,4 +76,9 @@ export interface CustomStringSchemaConstructor extends Yup.StringSchema {
 
 export type ExtendedYupType = Omit<typeof Yup, 'string'> & {
   string: CustomStringSchemaConstructor
+}
+
+export type InspectionValidationResult = {
+  isValid: boolean
+  errors: Partial<Record<keyof Partial<InspectionToBeValidated>, string>>
 }

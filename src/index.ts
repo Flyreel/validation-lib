@@ -10,4 +10,4 @@ export {
   US_STATES_FULL
 } from './constants'
 
-export { inspectionValidationSchema } from './schema'
+export { validateInspection } from './schema'
