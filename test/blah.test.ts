@@ -1,7 +1,8 @@
-import { sum } from '../src';
+import { inspectionValidationSchema } from '../src/createInspection'
 
-describe('blah', () => {
+describe('inspectionValidationSchema', () => {
   it('works', () => {
-    expect(sum(1, 1)).toEqual(2);
-  });
-});
+    console.log(inspectionValidationSchema.__isYupSchema__)
+    expect(1 + 1).toEqual(2)
+  })
+})

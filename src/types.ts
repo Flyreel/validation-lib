@@ -1,8 +1,16 @@
-import { US_STATES_COMPLETE, US_STATES_ABBREVIATED } from './constants'
+import * as Yup from 'yup'
+import {
+  CA_PROVINCES_ABBR,
+  CA_PROVINCES_FULL,
+  US_STATES_ABBR,
+  US_STATES_FULL
+} from './constants'
 import { ValuesType } from 'utility-types'
 
-export type USStatesAbbreviated = ValuesType<typeof US_STATES_ABBREVIATED>
-export type USStatesComplete = ValuesType<typeof US_STATES_COMPLETE>
+export type USStatesAbbreviated = ValuesType<typeof US_STATES_ABBR>
+export type USStatesFull = ValuesType<typeof US_STATES_FULL>
+export type CAProvincesFull = ValuesType<typeof CA_PROVINCES_FULL>
+export type CAProvincesAbbreviated = ValuesType<typeof CA_PROVINCES_ABBR>
 
 export enum InspectionFlyreelType {
   INSPECTION = 'inspection',
@@ -34,7 +42,7 @@ type CreateInspectionRequiredFields = {
   phone: string
   policy_id: string
   policy_type: InspectionPolicyType
-  state: string
+  state: CAProvincesAbbreviated | USStatesAbbreviated
   zip_code: string
 }
 
@@ -52,4 +60,25 @@ type CreateInspectionOptionalFields = Partial<{
 
 export type CreateInspectionRequestBody = CreateInspectionRequiredFields &
   CreateInspectionOptionalFields
-4
+
+type ValidatorFn<T> = (
+  message?: string | Record<string | number | symbol, unknown> | undefined
+) => T
+
+export interface CustomStringSchema extends Yup.StringSchema {
+  isCAPhone: ValidatorFn<this>
+  isCAPostalCode: ValidatorFn<this>
+  isPhone: ValidatorFn<this>
+  isUSPhone: ValidatorFn<this>
+  isUSPostalCode: ValidatorFn<this>
+  isUrl: ValidatorFn<this>
+}
+
+export interface CustomStringSchemaConstructor extends Yup.StringSchema {
+  (): CustomStringSchema
+  new (): CustomStringSchema
+}
+
+export type ExtendedYupType = Omit<typeof Yup, 'string'> & {
+  string: CustomStringSchemaConstructor
+}
