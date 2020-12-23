@@ -1,4 +1,3 @@
-import { ParseError } from 'libphonenumber-js'
 import * as Yup from 'yup'
 import {
   CA_POSTAL_CODE_REGEX,
@@ -6,14 +5,15 @@ import {
   URL_REGEX,
   US_POSTAL_CODE_REGEX,
   US_STATES_ABBR
-} from '../constants'
+} from './constants'
 import {
   ExtendedYupType,
   InspectionFlyreelType,
   InspectionPolicyType,
   ValidCountry
-} from '../types'
-import { validatePhoneNumber } from '../utils'
+} from './types'
+import { validatePhoneNumber } from './utils'
+import { ParseError } from 'libphonenumber-js'
 
 Yup.addMethod<Yup.StringSchema>(Yup.string, 'isUrl', function(message: string) {
   return this.test('validateIsUrl', message, function(value) {
@@ -93,28 +93,21 @@ Yup.addMethod<Yup.StringSchema>(Yup.string, 'isCAPhone', function(
   })
 })
 
-const inspectionValidationOptionalSchema = (Yup as ExtendedYupType)
+export const inspectionValidationSchema = (Yup as ExtendedYupType)
   .object()
   .shape({
     address2: (Yup as ExtendedYupType)
       .string()
-      .min(1, 'Valid address required')
-      .nullable(),
+      .nullable()
+      .min(1, 'Valid address required'),
     agent_email: (Yup as ExtendedYupType)
       .string()
       .nullable()
-      .when('agent_email', {
-        is: (value: string | undefined) => value !== undefined,
-        then: (Yup as ExtendedYupType).string().email('Valid email required')
-      }),
-
+      .email('Valid email required'),
     agent_name: (Yup as ExtendedYupType)
       .string()
       .nullable()
-      .when('agent_name', {
-        is: (value: string | undefined) => value !== undefined,
-        then: (Yup as ExtendedYupType).string().min(1, 'Valid name required')
-      }),
+      .min(1, 'Valid name required'),
 
     agent_phone: (Yup as ExtendedYupType)
       .string()
@@ -124,12 +117,9 @@ const inspectionValidationOptionalSchema = (Yup as ExtendedYupType)
     carrier: (Yup as ExtendedYupType).string().notRequired(),
 
     longitude: (Yup as ExtendedYupType).number().nullable(),
-    latitude: (Yup as ExtendedYupType).number().nullable()
-  })
 
-export const inspectionValidationSchema = (Yup as ExtendedYupType)
-  .object()
-  .shape({
+    latitude: (Yup as ExtendedYupType).number().nullable(),
+
     address1: (Yup as ExtendedYupType)
       .string()
       .min(1, 'Please enter a valid address')
@@ -210,7 +200,6 @@ export const inspectionValidationSchema = (Yup as ExtendedYupType)
 
     zip_code: (Yup as ExtendedYupType)
       .string()
-      .required('Postal Code required')
       .when('country', {
         is: ValidCountry.CA,
         then: (Yup as ExtendedYupType)
@@ -220,5 +209,5 @@ export const inspectionValidationSchema = (Yup as ExtendedYupType)
           .string()
           .isUSPostalCode('A valid Canadian Postal Code is required')
       })
+      .required()
   })
-  .concat(inspectionValidationOptionalSchema)
