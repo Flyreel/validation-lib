@@ -1,0 +1,1 @@
+export { validateInspection } from './validateInspection'

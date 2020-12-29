@@ -1,4 +1,3 @@
-import * as Yup from 'yup'
 import {
   CA_PROVINCES_ABBR,
   CA_PROVINCES_FULL,
@@ -30,18 +29,15 @@ export enum ValidCountry {
 
 type RequiredInspectionFields = {
   address1: string
-  carrier_expiration: string
-  expiration: string
+  carrier_expiration: Date | string
+  expiration: Date | string
   city: string
-  // the id of the conversation, not the actual conversation object
   conversation: string
   email: string
   first_name: string
-  flyreel_type: InspectionFlyreelType
   last_name: string
   phone: string
   policy_id: string
-  policy_type: InspectionPolicyType
   state: CAProvincesAbbreviated | USStatesAbbreviated
   zip_code: string
 }
@@ -51,34 +47,38 @@ type OptionalInspectionFields = Partial<{
   agent_email: string
   agent_name: string
   agent_phone: string
-  // the carrier id
   carrier: string
-  country: ValidCountry
+  country: string | ValidCountry
+  flyreel_type: string | InspectionFlyreelType
   latitude: number
   longitude: number
+  policy_type: string | InspectionPolicyType
 }>
 
 export type InspectionToBeValidated = RequiredInspectionFields &
   OptionalInspectionFields
 
-type ValidatorFn<T> = (
-  message?: string | Record<string | number | symbol, unknown> | undefined
-) => T
-
-export interface CustomStringSchema extends Yup.StringSchema {
-  isUrl: ValidatorFn<this>
-}
-
-export interface CustomStringSchemaConstructor extends Yup.StringSchema {
-  (): CustomStringSchema
-  new (): CustomStringSchema
-}
-
-export type ExtendedYupType = Omit<typeof Yup, 'string'> & {
-  string: CustomStringSchemaConstructor
-}
+export type InspectionValidationResultErrors = Partial<
+  Record<keyof Partial<InspectionToBeValidated>, string>
+>
 
 export type InspectionValidationResult = {
   isValid: boolean
-  errors: Partial<Record<keyof Partial<InspectionToBeValidated>, string>>
+  errors: InspectionValidationResultErrors
+}
+
+export type Values = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [field: string]: any
+}
+
+export type ValidationErrors<T> = {
+  [K in keyof T]?: T[K] extends Record<string, unknown>
+    ? ValidationErrors<T[K]>
+    : string
+}
+
+export type ValidationResult<T> = {
+  errors: ValidationErrors<T>
+  isValid: boolean
 }
