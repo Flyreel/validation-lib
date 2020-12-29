@@ -158,7 +158,7 @@ export const inspectionValidationSchema: Yup.SchemaOf<InspectionToBeValidated> =
     policy_type: Yup.string()
       .lowercase()
       .nullable()
-      .default(InspectionPolicyType.NEW)
+      .default(InspectionPolicyType.UNKOWN)
       .oneOf(FLYREEL_POLICY_TYPES, VALIDATION_MESSAGES.POLICY_TYPE),
 
     state: Yup.string()

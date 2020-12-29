@@ -12,7 +12,8 @@ export const FLYREEL_TYPES = [
 
 export const FLYREEL_POLICY_TYPES = [
   InspectionPolicyType.NEW,
-  InspectionPolicyType.RENEWAL
+  InspectionPolicyType.RENEWAL,
+  InspectionPolicyType.UNKOWN
 ]
 
 export const US_STATES = [

@@ -19,7 +19,8 @@ export enum InspectionFlyreelType {
 
 export enum InspectionPolicyType {
   NEW = 'new',
-  RENEWAL = 'renewal'
+  RENEWAL = 'renewal',
+  UNKOWN = 'unknown'
 }
 
 export enum ValidCountry {
