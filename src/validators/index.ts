@@ -1,1 +1,4 @@
-export { validateInspection } from './validateInspection'
+export {
+  validateInspection,
+  validateInspectionUpdate
+} from './validateInspection'

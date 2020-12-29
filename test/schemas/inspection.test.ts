@@ -1,18 +1,21 @@
 /* eslint-disable */
-import { validateInspection } from '../../src/validators/validateInspection'
+import {
+  validateInspection,
+  validateInspectionUpdate
+} from '../../src/validators/validateInspection'
 import { VALIDATION_MESSAGES } from '../../src/constants'
-import { ValidCountry } from '../../src/types'
+import { InspectionToBeValidated, ValidCountry } from '../../src/types'
 
-const weekLater = new Date()
-weekLater.setDate(weekLater.getDate() + 7)
+function getDateFromNow(numberOfDays: number) {
+  const dateFromNow = new Date()
+  dateFromNow.setDate(dateFromNow.getDate() + numberOfDays)
+  return dateFromNow
+}
 
-const fiveDaysLater = new Date()
-fiveDaysLater.setDate(fiveDaysLater.getDate() + 5)
+const weekLater = getDateFromNow(7)
+const fiveDaysLater = getDateFromNow(5)
 
-const twoDaysLater = new Date()
-twoDaysLater.setDate(fiveDaysLater.getDate() + 2)
-
-describe('inspectionValidationSchema', () => {
+describe('validateInspection', () => {
   it('throws an error when there is a state mismatch with a CA country code', async () => {
     const result = await validateInspection({
       expiration: fiveDaysLater,
@@ -262,5 +265,89 @@ describe('inspectionValidationSchema', () => {
     expect(errors.carrier_expiration).toStrictEqual(
       VALIDATION_MESSAGES.DATES.DIFF_TOO_SMALL
     )
+  })
+})
+
+describe('validateInspectionUpdate', () => {
+  let inspectionBeingUpdated: Partial<InspectionToBeValidated> = {}
+
+  beforeEach(() => {
+    inspectionBeingUpdated = {
+      address1: 'test',
+      email: 'test@test.com',
+      conversation: '1234567890123456789011234',
+      expiration: fiveDaysLater,
+      carrier_expiration: weekLater,
+      first_name: 'test',
+      country: 'US',
+      last_name: 'test',
+      policy_id: '11223344556677',
+      phone: '2145555555',
+      state: 'TX',
+      city: 'Dallas',
+      zip_code: '75555'
+    }
+  })
+
+  it(`throws an error trying to update the country from US to CA, without a valid state change`, async () => {
+    const { errors } = await validateInspectionUpdate(
+      { country: 'CA' },
+      inspectionBeingUpdated as InspectionToBeValidated
+    )
+
+    expect(errors.state).toStrictEqual(
+      VALIDATION_MESSAGES.STATE.INVALID_CA_PROVINCE
+    )
+  })
+
+  it(`throws an error trying to update the country from US to CA, without a valid zip_code change`, async () => {
+    const { errors } = await validateInspectionUpdate(
+      { country: 'CA' },
+      inspectionBeingUpdated as InspectionToBeValidated
+    )
+
+    expect(errors.zip_code).toStrictEqual(
+      VALIDATION_MESSAGES.ZIP_CODE.INVALID_CA_CODE
+    )
+  })
+
+  it(`throws an error trying to update the state to a CA province without updating the country to CA`, async () => {
+    const { errors } = await validateInspectionUpdate(
+      { state: 'ON' },
+      inspectionBeingUpdated as InspectionToBeValidated
+    )
+
+    expect(errors.state).toStrictEqual(
+      VALIDATION_MESSAGES.STATE.INVALID_US_STATE
+    )
+  })
+
+  it(`throws an error trying to update the expiration to a date beyond the already set carrier_expiration`, async () => {
+    const { errors } = await validateInspectionUpdate(
+      { expiration: getDateFromNow(10) },
+      inspectionBeingUpdated as InspectionToBeValidated
+    )
+
+    expect(errors.carrier_expiration).toStrictEqual(
+      VALIDATION_MESSAGES.DATES.DIFF_TOO_SMALL
+    )
+  })
+
+  it(`throws an error trying to update an existing value to an invalid format`, async () => {
+    const { errors } = await validateInspectionUpdate(
+      { email: 'aa' },
+      inspectionBeingUpdated as InspectionToBeValidated
+    )
+
+    expect(errors.email).toStrictEqual(VALIDATION_MESSAGES.EMAIL.INVALID_FORMAT)
+  })
+
+  it(`throws an error trying to update an existing value to an empty value`, async () => {
+    const { errors } = await validateInspectionUpdate(
+      { address1: '' },
+      inspectionBeingUpdated as InspectionToBeValidated
+    )
+
+    expect(errors.address1).toStrictEqual(VALIDATION_MESSAGES.GENERAL.TOO_SHORT)
   })
 })
