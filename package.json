@@ -1,12 +1,12 @@
 {
-  "name": "@flyreel/validation",
+  "name": "@flyreel/validation-lib",
   "version": "0.1.0",
   "module": "dist/flyreel-validation.esm.js",
   "main": "dist/index.js",
   "license": "MIT",
   "author": "Ahmed Alahmady",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/flyreel"
+    "registry": "https://npm.pkg.github.com/@flyreel"
   },
   "files": [
     "dist",
