@@ -4,7 +4,7 @@
   "module": "dist/flyreel-validation.esm.js",
   "main": "dist/index.js",
   "license": "MIT",
-  "author": "Flyreel",
+  "author": "Ahmed Alahmady",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/flyreel"
   },
