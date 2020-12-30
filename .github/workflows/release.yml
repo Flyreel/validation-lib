@@ -1,13 +1,10 @@
 name: Release
-
 on:
-  push:
-    branches:
-      - master
+  release:
+    types: [created]
 
 jobs:
-  release:
-    name: Release
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -16,25 +13,19 @@ jobs:
           # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
           fetch-depth: 0
 
-      - name: Setup Node.js 12.x
-        uses: actions/setup-node@master
-        with:
-          node-version: 12.x
-          registry-url: 'https://npm.pkg.github.com'
-          # Defaults to the user or organization that owns the workflow file
-      - name: Install Dependencies
-        run: yarn --frozen-lockfile
+      - name: deleting any existing .npmrc
+        run: -rm rf .npmrc
 
       - name: Creating .npmrc
         run: |
           cat << EOF > "$HOME/.npmrc"
-            email=my@email.com
+            email=ahmed.alahmady@flyreel.co
             //npm.pkg.github.com/:_authToken=$NPM_TOKEN
-            @flyreel:registry=https://npm.pkg.github.com
             always-auth=true
           EOF
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release Pull Request
         uses: changesets/action@master
@@ -43,3 +34,4 @@ jobs:
           publish: yarn release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
