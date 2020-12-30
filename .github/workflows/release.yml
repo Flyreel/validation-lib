@@ -20,10 +20,8 @@ jobs:
         uses: actions/setup-node@master
         with:
           node-version: 12.x
-          registry-url: 'https://npm.pkg.github.com/@flyreel'
+          registry-url: 'https://npm.pkg.github.com'
           # Defaults to the user or organization that owns the workflow file
-          scope: '@flyreel'          
-
       - name: Install Dependencies
         run: yarn --frozen-lockfile
 

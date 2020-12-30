@@ -1,12 +1,8 @@
-# @flyreel/validation
+# @flyreel/validation-lib
 
 This package aims to consolidate validation rules for use in Flyreel APIs and Apps.
 
 ## Commands
-
-TSDX scaffolds your new library inside `/src`.
-
-To run TSDX, use:
 
 ```bash
 npm start # or yarn start
