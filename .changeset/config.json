@@ -1,10 +1,13 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@1.4.0/schema.json",
-  "changelog": "@changesets/cli/changelog",
-  "commit": false,
-  "linked": [],
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "Flyreel/validation-lib" }
+  ],
   "access": "restricted",
   "baseBranch": "master",
+  "commit": false,
+  "linked": [],
   "updateInternalDependencies": "patch",
   "ignore": []
 }

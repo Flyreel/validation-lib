@@ -3,11 +3,8 @@
   "version": "0.1.0",
   "module": "dist/flyreel-validation.esm.js",
   "main": "dist/index.js",
-  "engines": {
-    "node": ">=10"
-  },
   "license": "MIT",
-  "author": "",
+  "author": "Flyreel",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/flyreel"
   },
@@ -18,15 +15,17 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsdx build",
-    "lint": "eslint '**/*.{js,ts}'",
-    "lint:fix": "npm run lint -- --fix",
+    "lint": "eslint . --ext ts --ext tsx",
+    "lint:fix": "yarn lint -- --fix",
     "lint:types": "tsc --noEmit",
+    "format": "prettier --write --ignore-path .gitignore \"*/**/*.{js,jsx,ts,tsx}\"",
     "postversion": "git push && git push origin v$npm_package_version",
     "prepare": "tsdx build",
-    "prepublishOnly": "npm run lint && npm run lint:types && npm test && npm run build",
+    "prepublishOnly": "yarn lint && yarn lint:types && yarn test && yarn build",
     "release": "yarn build && changeset publish",
     "start": "tsdx watch",
-    "test": "tsdx test"
+    "test": "tsdx test",
+    "test-all": "yarn lint && yarn type-check && yarn test"
   },
   "prettier": {
     "trailingComma": "none",
@@ -37,13 +36,18 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint:types && lint-staged"
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn test-all"
     }
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "yarn format"
+    ]
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.2.7",
     "@changesets/cli": "^2.12.0",
-    "@size-limit/preset-small-lib": "^4.9.1",
     "@types/yup": "0.29.11",
     "@typescript-eslint/eslint-plugin": "^4.11.1",
     "@typescript-eslint/parser": "^4.11.1",
