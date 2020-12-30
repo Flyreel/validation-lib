@@ -5,9 +5,6 @@
   "main": "dist/index.js",
   "license": "MIT",
   "author": "Flyreel",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/flyreel"
-  },
   "files": [
     "dist",
     "src"
