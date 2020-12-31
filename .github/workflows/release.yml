@@ -30,12 +30,9 @@ jobs:
         run: |
           cat << EOF > "$HOME/.npmrc"
             email=ahmed.alahmady@flyreel.co
-            //npm.pkg.github.com/:_authToken=$NPM_TOKEN
+            //npm.pkg.github.com/:_authToken=${NPM_TOKEN}
             always-auth=true
           EOF
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release Pull Request
         uses: changesets/action@master
