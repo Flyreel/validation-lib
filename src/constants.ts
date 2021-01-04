@@ -1,8 +1,44 @@
 import {
+  InspectionStatus,
   InspectionFlyreelType,
   InspectionPolicyType,
   ValidCountry
 } from './types'
+
+export const FLYREEL_STATUS = [
+  {
+    label: 'Cancelled',
+    value: InspectionStatus.CANCELLED
+  },
+  {
+    label: 'Completed',
+    value: InspectionStatus.COMPLETED
+  },
+  {
+    label: 'Invited',
+    value: InspectionStatus.INVITED
+  },
+  {
+    label: 'In Review',
+    value: InspectionStatus.IN_REVIEW
+  },
+  {
+    label: 'Ready for Review',
+    value: InspectionStatus.READY_FOR_REVIEW
+  },
+  {
+    label: 'Started',
+    value: InspectionStatus.STARTED
+  },
+  {
+    label: 'Submitted',
+    value: InspectionStatus.SUBMITTED
+  }
+]
+
+export const FLYREEL_INSPECTION_STATUSES = FLYREEL_STATUS.map(
+  status => status.value
+)
 
 export const FLYREEL_TYPES = [
   InspectionFlyreelType.INSPECTION,
@@ -101,18 +137,22 @@ export const URL_REGEX = new RegExp(
   /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/
 )
 
+export const MONGOID_REGEX = new RegExp(/^[a-f\d]{24}$/i)
+
 export const PHONE_VALIDATION_MESSAGES = {
   FALLBACK: 'Invalid phone number',
   INVALID_COUNTRY_CODE: 'Country is not currently supported',
   MISSING_PHONE_NUMBER: 'No phone number provided',
   NOT_POSSIBLE:
-    'Not a valid phone number, failed at either the phone number length or matching any regular expressions'
+    'Invalid, failed at either the phone number length or matching any regular expressions'
 }
 
 export const VALIDATION_MESSAGES = {
   PHONE: PHONE_VALIDATION_MESSAGES,
   FLYREEL_TYPE: `Must be one of ${FLYREEL_TYPES}`,
   POLICY_TYPE: `Must be one of ${FLYREEL_POLICY_TYPES}`,
+  STATUS: `Must be one of ${FLYREEL_INSPECTION_STATUSES}`,
+  MONGO_ID: 'Invalid Mongo Object ID format',
   DATES: {
     CARRIER_EXP_SEVEN: 'Carrier Expiration must be at least a week from now',
     EXPIRATION_FIVE: 'Expiration must be at least 5 days from now',

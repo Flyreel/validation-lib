@@ -1,11 +1,11 @@
-import { ValidationErrors } from '../types';
-import type { ValidationError } from 'yup';
+import * as Yup from 'yup'
+import { ValidationErrors } from '../types'
 
 /**
  * Transform Yup errors to a ValidationErrors object
  */
 export function yupToValidationErrors<T extends Record<string, unknown>>(
-  yupError: ValidationError
+  yupError: Yup.ValidationError
 ): ValidationErrors<T> {
   const errors: ValidationErrors<T> = {}
   if (yupError.inner.length === 0 && yupError.path) {

@@ -23,55 +23,65 @@ export enum InspectionPolicyType {
   UNKOWN = 'unknown'
 }
 
+export enum InspectionStatus {
+  ABANDONED = 'abandoned',
+  CANCELLED = 'cancelled',
+  COMPLETED = 'completed',
+  EXPIRED = 'expired',
+  INVITED = 'invited',
+  IN_REVIEW = 'in_review',
+  PENDING = 'pending',
+  READY_FOR_INVITE = 'ready_for_invite',
+  READY_FOR_REVIEW = 'ready_for_review',
+  STARTED = 'started',
+  SUBMITTED = 'submitted'
+}
+
 export enum ValidCountry {
   US = 'US',
   CA = 'CA'
 }
 
-type RequiredInspectionFields = {
+export type RequiredInspectionFields = {
   address1: string
   carrier_expiration: Date | string
-  expiration: Date | string
   city: string
+  country: string | ValidCountry
   conversation: string
   email: string
+  expiration: Date | string
   first_name: string
+  flyreel_type: string | InspectionFlyreelType
   last_name: string
   phone: string
   policy_id: string
-  state: CAProvincesAbbreviated | USStatesAbbreviated
+  policy_type: string | InspectionPolicyType
+  state: CAProvincesAbbreviated | USStatesAbbreviated | string
   zip_code: string
 }
 
-type OptionalInspectionFields = Partial<{
+export type OptionalInspectionFields = Partial<{
   address2: string
   agent_email: string
   agent_name: string
   agent_phone: string
   carrier: string
-  country: string | ValidCountry
-  flyreel_type: string | InspectionFlyreelType
   latitude: number
   longitude: number
-  policy_type: string | InspectionPolicyType
+  status: InspectionStatus
 }>
+
+export type DashboardInspectionCreationValidation = RequiredInspectionFields &
+  Pick<
+    OptionalInspectionFields,
+    'address2' | 'agent_email' | 'agent_phone' | 'agent_name'
+  >
+
+export type DashboardInspectionUpdateValidation = DashboardInspectionCreationValidation &
+  Omit<OptionalInspectionFields, 'latitude' | 'longitude'>
 
 export type InspectionToBeValidated = RequiredInspectionFields &
   OptionalInspectionFields
-
-export type InspectionValidationResultErrors = Partial<
-  Record<keyof Partial<InspectionToBeValidated>, string>
->
-
-export type InspectionValidationResult = {
-  isValid: boolean
-  errors: InspectionValidationResultErrors
-}
-
-export type Values = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [field: string]: any
-}
 
 export type ValidationErrors<T> = {
   [K in keyof T]?: T[K] extends Record<string, unknown>

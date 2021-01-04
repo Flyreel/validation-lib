@@ -226,12 +226,10 @@ describe('validateInspection', () => {
     expect(errors.city).toStrictEqual(VALIDATION_MESSAGES.GENERAL.TOO_SHORT)
   })
 
-  it(`throws an error when conversation is present but not 24 char`, async () => {
+  it(`throws an error when conversation id is present but in an incorrect format`, async () => {
     const { errors } = await validateInspection({ conversation: '2324222  ' })
 
-    expect(errors.conversation).toStrictEqual(
-      VALIDATION_MESSAGES.GENERAL.TOO_SHORT_MONGO
-    )
+    expect(errors.conversation).toStrictEqual(VALIDATION_MESSAGES.MONGO_ID)
   })
 
   it(`throws an error when expiration is less than 5 days away`, async () => {

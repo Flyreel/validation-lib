@@ -1,8 +1,8 @@
 import * as Yup from 'yup'
 import { yupToValidationErrors } from './yupErrorUtils'
-import { ValidationErrors, ValidationResult, Values } from '../types'
+import { ValidationErrors, ValidationResult } from '../types'
 
-export async function useYupValidation<T extends Values>(
+export async function useYupValidation<T extends Record<string, unknown>>(
   values: Partial<T>,
   validationSchema: Yup.SchemaOf<T>,
   validationOptions: {
