@@ -21,3 +21,10 @@ export function differenceInDays(
     .utc()
     .diff(dayjs(earlierDate).utc(), 'd')
 }
+
+export function getDateFromNow(numberOfDays: number): Date {
+  const dateFromNow = dayjs(new Date())
+    .endOf('d')
+    .add(numberOfDays, 'd')
+  return dateFromNow.endOf('d').toDate()
+}

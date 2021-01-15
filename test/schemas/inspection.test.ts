@@ -5,12 +5,7 @@ import {
 } from '../../src/validators/validateInspection'
 import { VALIDATION_MESSAGES } from '../../src/constants'
 import { InspectionToBeValidated, ValidCountry } from '../../src/types'
-
-function getDateFromNow(numberOfDays: number) {
-  const dateFromNow = new Date()
-  dateFromNow.setDate(dateFromNow.getDate() + numberOfDays)
-  return dateFromNow
-}
+import { getDateFromNow } from '../../src/utils/dateUtils'
 
 const weekLater = getDateFromNow(7)
 const fiveDaysLater = getDateFromNow(5)
@@ -20,10 +15,10 @@ describe('validateInspection', () => {
     const result = await validateInspection({
       expiration: fiveDaysLater,
       carrier_expiration: weekLater,
-      phone: '2145976852',
+      phone: '2145556852',
       state: 'TX',
       city: 'Dallas',
-      first_name: 'Ahmed',
+      first_name: 'Test',
       zip_code: '00000',
       country: ValidCountry.CA
     })
@@ -38,15 +33,16 @@ describe('validateInspection', () => {
     const result = await validateInspection({
       expiration: fiveDaysLater,
       carrier_expiration: weekLater,
-      phone: '2145976852',
+      phone: '2145556852',
       state: 'TX',
       city: 'Dallas',
-      first_name: 'Ahmed',
+      first_name: 'Test',
       zip_code: '00000',
       country: ValidCountry.CA
     })
 
     expect(result.isValid).toBe(false)
+
     expect(result.errors.zip_code).toStrictEqual(
       VALIDATION_MESSAGES.ZIP_CODE.INVALID_CA_CODE
     )
@@ -56,15 +52,16 @@ describe('validateInspection', () => {
     const result = await validateInspection({
       expiration: fiveDaysLater,
       carrier_expiration: weekLater,
-      phone: '2145976852',
+      phone: '2145556852',
       state: 'QC',
       city: 'Dallas',
-      first_name: 'Ahmed',
+      first_name: 'Test',
       zip_code: '4422',
       country: ValidCountry.US
     })
 
     expect(result.isValid).toBe(false)
+
     expect(result.errors.state).toStrictEqual(
       VALIDATION_MESSAGES.STATE.INVALID_US_STATE
     )
@@ -77,7 +74,7 @@ describe('validateInspection', () => {
       phone: '2145976852',
       state: 'QC',
       city: 'Dallas',
-      first_name: 'Ahmed',
+      first_name: 'Test',
       zip_code: '4422',
       country: ValidCountry.US
     })
@@ -236,7 +233,25 @@ describe('validateInspection', () => {
     const { errors } = await validateInspection({ expiration: new Date() })
 
     expect(errors.expiration).toStrictEqual(
-      VALIDATION_MESSAGES.DATES.EXPIRATION_FIVE
+      VALIDATION_MESSAGES.DATES.EXPIRATION_MIN_DAYS
+    )
+  })
+
+  it(`throws no error when expiration is between 5-90 days away`, async () => {
+    const { errors } = await validateInspection({
+      expiration: getDateFromNow(89)
+    })
+
+    expect(errors.expiration).toStrictEqual(undefined)
+  })
+
+  it(`throws an error when expiration is more than 90 days away`, async () => {
+    const { errors } = await validateInspection({
+      expiration: getDateFromNow(92)
+    })
+
+    expect(errors.expiration).toStrictEqual(
+      VALIDATION_MESSAGES.DATES.EXPIRATION_MAX_DAYS
     )
   })
 
@@ -250,7 +265,27 @@ describe('validateInspection', () => {
     })
 
     expect(errors.carrier_expiration).toStrictEqual(
-      VALIDATION_MESSAGES.DATES.CARRIER_EXP_SEVEN
+      VALIDATION_MESSAGES.DATES.CARRIER_EXPIRATION_MIN_DAYS
+    )
+  })
+
+  it(`throws no error when carrier expiration is between 7-92 days away`, async () => {
+    const { errors } = await validateInspection({
+      expiration: getDateFromNow(75),
+      carrier_expiration: getDateFromNow(91)
+    })
+
+    expect(errors.carrier_expiration).toStrictEqual(undefined)
+  })
+
+  it(`throws an error when carrier expiration is more than 92 days away`, async () => {
+    const { errors } = await validateInspection({
+      expiration: getDateFromNow(75),
+      carrier_expiration: getDateFromNow(93)
+    })
+
+    expect(errors.carrier_expiration).toStrictEqual(
+      VALIDATION_MESSAGES.DATES.CARRIER_EXPIRATION_MAX_DAYS
     )
   })
 

@@ -154,8 +154,13 @@ export const VALIDATION_MESSAGES = {
   STATUS: `Must be one of ${FLYREEL_INSPECTION_STATUSES}`,
   MONGO_ID: 'Invalid Mongo Object ID format',
   DATES: {
-    CARRIER_EXP_SEVEN: 'Carrier Expiration must be at least a week from now',
-    EXPIRATION_FIVE: 'Expiration must be at least 5 days from now',
+    CARRIER_EXPIRATION_MIN_DAYS:
+      'Carrier Expiration must be at least a week from the end of today',
+    CARRIER_EXPIRATION_MAX_DAYS:
+      'Carrier Expiration must not be more than 92 days away from the end of today',
+    EXPIRATION_MIN_DAYS: 'Expiration must be at least 5 days the end of today',
+    EXPIRATION_MAX_DAYS:
+      'Expiration cannot be more than 90 days from the end of today',
     DIFF_TOO_SMALL:
       'Carrier Expiration must be at least 2 days after the Expiration'
   },

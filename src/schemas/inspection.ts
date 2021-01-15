@@ -10,7 +10,7 @@ import {
   US_STATES_ABBR,
   VALIDATION_MESSAGES
 } from '../constants'
-import { differenceInDays } from '../utils/dateUtils'
+import { differenceInDays, getDateFromNow } from '../utils/dateUtils'
 import {
   InspectionFlyreelType,
   InspectionPolicyType,
@@ -23,12 +23,6 @@ import { useValidatePhoneNumber } from '../utils'
 
 const { CA, US } = ValidCountry
 const { EMAIL, DATES, PHONE, GENERAL, STATE, ZIP_CODE } = VALIDATION_MESSAGES
-
-function getDateFromNow(numberOfDays: number) {
-  const dateFromNow = new Date()
-  dateFromNow.setDate(dateFromNow.getDate() + numberOfDays)
-  return dateFromNow
-}
 
 function checkOptionalString(value: string | undefined) {
   if (value !== undefined) {
@@ -71,7 +65,8 @@ const coreValidationSchema: Yup.SchemaOf<RequiredInspectionFields> = Yup.object(
 
     carrier_expiration: Yup.date()
       .default(getDateFromNow(7))
-      .min(getDateFromNow(7), DATES.CARRIER_EXP_SEVEN)
+      .min(getDateFromNow(7), DATES.CARRIER_EXPIRATION_MIN_DAYS)
+      .max(getDateFromNow(92), DATES.CARRIER_EXPIRATION_MAX_DAYS)
       .test('isGreaterThanTwoDaysDif', DATES.DIFF_TOO_SMALL, function(
         carrier_expiration
       ) {
@@ -104,7 +99,8 @@ const coreValidationSchema: Yup.SchemaOf<RequiredInspectionFields> = Yup.object(
 
     expiration: Yup.date()
       .default(getDateFromNow(5))
-      .min(getDateFromNow(5), DATES.EXPIRATION_FIVE),
+      .min(getDateFromNow(5), DATES.EXPIRATION_MIN_DAYS)
+      .max(getDateFromNow(90), DATES.EXPIRATION_MAX_DAYS),
 
     first_name: Yup.string()
       .trim()
