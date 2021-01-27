@@ -1,1 +1,1 @@
-export { inspectionValidationSchema } from './inspection'
+export * from './inspection'

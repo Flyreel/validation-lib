@@ -7,24 +7,19 @@ dayjs.extend(advancedFormat)
 
 export function differenceInDays(
   laterDate: string | number | Date | dayjs.Dayjs | undefined,
-  earlierDate: string | number | Date | dayjs.Dayjs | undefined
+  earlierDate?: string | number | Date | dayjs.Dayjs
 ): number {
-  const now = dayjs(new Date()).utc()
-
-  if (!earlierDate) {
-    return dayjs(laterDate)
-      .utc()
-      .diff(now, 'd')
-  }
-
-  return dayjs(laterDate)
+  const from = dayjs(earlierDate).startOf('d') ?? dayjs(new Date()).startOf('d')
+  const dif = dayjs(laterDate)
     .utc()
-    .diff(dayjs(earlierDate).utc(), 'd')
+    .diff(dayjs(from).utc(), 'd')
+  return dif
 }
 
 export function getDateFromNow(numberOfDays: number): Date {
-  const dateFromNow = dayjs(new Date())
-    .endOf('d')
+  const today = dayjs(new Date()).startOf('d')
+  const dateFromNow = dayjs(today)
     .add(numberOfDays, 'd')
-  return dateFromNow.endOf('d').toDate()
+    .endOf('d')
+  return dateFromNow.toDate()
 }
