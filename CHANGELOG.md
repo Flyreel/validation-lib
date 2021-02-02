@@ -1,5 +1,15 @@
 # @flyreel/validation-lib
 
+## 0.2.0
+
+### Minor Changes
+
+- [`eb6a3c3`](https://github.com/Flyreel/validation-lib/commit/eb6a3c376cce7f64beda10ce081ec51ce20dece5) Thanks [@akadop](https://github.com/akadop)! - added meta field validation as well as seperated out the date validation to be different for create and update
+
+### Patch Changes
+
+- [`ba2c682`](https://github.com/Flyreel/validation-lib/commit/ba2c6828a6c796b24a35e6d9de326ab8082b6834) Thanks [@akadop](https://github.com/akadop)! - schema and type changes
+
 ## 0.1.6
 
 ### Patch Changes
