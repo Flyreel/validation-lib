@@ -1,6 +1,6 @@
 {
   "name": "@flyreel/validation-lib",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "module": "dist/flyreel-validation.esm.js",
   "main": "dist/index.js",
   "license": "MIT",
@@ -21,6 +21,7 @@
     "format": "prettier --write --ignore-path .gitignore \"*/**/*.{js,jsx,ts,tsx}\"",
     "prepare": "tsdx build",
     "prepublishOnly": "yarn lint && yarn lint:types && yarn test && yarn build",
+    "pub": "npm version patch --force && npm publish",
     "release": "yarn prepublishOnly && changeset publish",
     "start": "tsdx watch",
     "test": "tsdx test",
