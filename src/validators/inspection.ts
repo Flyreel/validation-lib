@@ -1,11 +1,13 @@
 import {
   CreateInspectionPayload,
+  CreateSpecificMeta,
   UpdateInspectionPayload,
   ValidationErrors,
   ValidationResult
 } from '../types'
 import {
-  createInspectionValidationSchema,
+  createInspectionSchema,
+  createMetaFieldSchema,
   updateInspectionValidationSchema
 } from '../schemas/inspection'
 import { useYupValidation } from '../utils/useYupValidation'
@@ -15,11 +17,21 @@ type ValidatorOptions = {
   stripUnknown: boolean
 }
 
+export async function validateCreateInspectionMeta(
+  meta: CreateSpecificMeta,
+  options?: ValidatorOptions
+): Promise<ValidationResult<CreateInspectionPayload['meta']>> {
+  return await useYupValidation(meta, createMetaFieldSchema, {
+    abortEarly: options?.abortEarly ?? false,
+    stripUnknown: options?.stripUnknown ?? false
+  })
+}
+
 export async function validateCreateInspection(
   inspection: Partial<CreateInspectionPayload>,
   options?: ValidatorOptions
 ): Promise<ValidationResult<CreateInspectionPayload>> {
-  return await useYupValidation(inspection, createInspectionValidationSchema, {
+  return await useYupValidation(inspection, createInspectionSchema, {
     abortEarly: options?.abortEarly ?? false,
     stripUnknown: options?.stripUnknown ?? false
   })

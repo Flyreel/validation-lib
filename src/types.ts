@@ -46,18 +46,26 @@ export enum ValidCountry {
 
 export type RequiredCoreInspectionFields = {
   address1: string
-  carrier_expiration: Date | string
   city: string
   country: string | ValidCountry
   conversation: string
   email: string
-  expiration: Date | string
   first_name: string
   last_name: string
   policy_id: string
   state: CAProvincesAbbreviated | USStatesAbbreviated | string
   zip_code: string
 }
+
+export type DateFields = {
+  carrier_expiration: Date | string
+  expiration: Date | string
+}
+
+export type CreateSpecificMeta = Partial<{
+  external_id: string
+  forms: Partial<MetaFormFields>
+}>
 
 export type OptionalCoreInspectionFields = Partial<{
   address2: string
@@ -69,6 +77,7 @@ export type OptionalCoreInspectionFields = Partial<{
   phone: string
   policy_type: string | InspectionPolicyType
   status: InspectionStatus
+  meta: CreateSpecificMeta
 }>
 
 type AcceptedLocationTypes = 'Point'
@@ -88,15 +97,6 @@ type MetaFormFields = {
   inspection_form_id: string
 }
 
-export type OptionalCreateSpecificFields = Partial<{
-  meta: Partial<{
-    external_id: string
-    forms: Partial<MetaFormFields>
-  }>
-}>
-
-export type MetaFormFieldSchema = Yup.SchemaOf<MetaFormFields>
-
 export type DashboardInspectionCreationValidation = RequiredCoreInspectionFields &
   Pick<
     OptionalCoreInspectionFields,
@@ -109,35 +109,34 @@ export type DashboardInspectionCreationValidation = RequiredCoreInspectionFields
     | 'policy_type'
   >
 
-export type CoreInspectionPayload = RequiredCoreInspectionFields &
-  OptionalCoreInspectionFields
+export type CoreInspectionPayload = RequiredCoreInspectionFields
 
 export type CreateInspectionPayload = CoreInspectionPayload &
-  OptionalCreateSpecificFields
+  OptionalCoreInspectionFields &
+  DateFields
 
 export type UpdateInspectionPayload = CoreInspectionPayload &
-  OptionalUpdateSpecificFields
+  OptionalCoreInspectionFields &
+  OptionalUpdateSpecificFields &
+  DateFields
 
 export type CoreRequiredSchema = Yup.SchemaOf<RequiredCoreInspectionFields>
+
+export type CoreDateSchema = Yup.SchemaOf<DateFields>
+
 export type CoreOptionalSchema = Yup.SchemaOf<OptionalCoreInspectionFields>
-
-export type CoreInspectionSchema = Yup.SchemaOf<
-  RequiredCoreInspectionFields & OptionalCoreInspectionFields
->
-
+export type CreateMetaSchema = Yup.SchemaOf<CreateSpecificMeta>
 export type OptionalUpdateSchema = Yup.SchemaOf<OptionalUpdateSpecificFields>
-export type OptionalCreateSchema = Yup.SchemaOf<OptionalCreateSpecificFields>
 
 export type CreateInspectionSchema = Yup.SchemaOf<
-  RequiredCoreInspectionFields &
-    OptionalCoreInspectionFields &
-    OptionalCreateSpecificFields
+  RequiredCoreInspectionFields & OptionalCoreInspectionFields & DateFields
 >
 
 export type UpdateInspectionSchema = Yup.SchemaOf<
   RequiredCoreInspectionFields &
     OptionalCoreInspectionFields &
-    OptionalUpdateSpecificFields
+    OptionalUpdateSpecificFields &
+    DateFields
 >
 
 export type ValidationErrors<T> = {
@@ -147,6 +146,12 @@ export type ValidationErrors<T> = {
 }
 
 export type ValidationResult<T> = {
-  errors: ValidationErrors<T>
+  errors: ValidationErrors<T> & {
+    meta?: ValidationErrors<CreateSpecificMeta> & {
+      forms?: ValidationErrors<CreateSpecificMeta['forms']>
+    }
+    location?: ValidationErrors<InspectionLocation>
+  }
+
   isValid: boolean
 }

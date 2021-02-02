@@ -303,52 +303,64 @@ describe('validateCreateInspection()', () => {
   it('meta.external_id - throws an error if there is an incorrect value type for a field that exists', async () => {
     const { errors } = await validateCreateInspection({
       meta: {
-        external_id: 123 as any
+        external_id: [] as any
       }
     })
 
-    console.log(errors.meta)
+    expect(errors.meta?.external_id as any).toBeDefined()
+  })
 
-    // expect(errors.meta?.external_id).toBeDefined()
+  it('meta.external_id - throws an error a string that is less than 2char', async () => {
+    const { errors } = await validateCreateInspection({
+      meta: {
+        external_id: '1'
+      }
+    })
+
+    expect(errors.meta?.external_id).toStrictEqual(
+      VALIDATION_MESSAGES.GENERAL.TOO_SHORT
+    )
   })
 
   it('meta.forms.self_inspection_form_id - throws an error if there is an incorrect value type for a field that exists', async () => {
     const { errors } = await validateCreateInspection({
       meta: {
         forms: {
-          self_inspection_form_id: 123 as any
+          self_inspection_form_id: '1'
         }
       }
     })
-
-    console.log(errors)
-
-    // expect(errors.meta?.forms?.self_inspection_form_id).toBeDefined()
+    expect(errors.meta?.forms?.self_inspection_form_id).toStrictEqual(
+      VALIDATION_MESSAGES.GENERAL.TOO_SHORT
+    )
   })
 
   it('meta.forms.self_inspection_internal_form - throws an error if there is an incorrect value type for a field that exists', async () => {
     const { errors } = await validateCreateInspection({
       meta: {
         forms: {
-          self_inspection_internal_form: 123 as any
+          self_inspection_internal_form: '1' as any
         }
       }
     })
-    console.log(errors.meta)
-    // expect(errors.meta?.forms?.self_inspection_internal_form).toBeDefined()
+
+    expect(errors.meta?.forms?.self_inspection_internal_form).toStrictEqual(
+      VALIDATION_MESSAGES.GENERAL.TOO_SHORT
+    )
   })
 
   it('meta.forms.inspection_form_id - throws an error if there is an incorrect value type for a field that exists', async () => {
     const { errors } = await validateCreateInspection({
       meta: {
         forms: {
-          inspection_form_id: 123 as any
+          inspection_form_id: '1'
         }
       }
     })
-    console.log(errors.meta)
 
-    // expect(errors.meta?.forms?.inspection_form_id).toBeDefined()
+    expect(errors.meta?.forms?.inspection_form_id).toStrictEqual(
+      VALIDATION_MESSAGES.GENERAL.TOO_SHORT
+    )
   })
 
   it(`phone - throws an error when phone has an incorrect format`, async () => {
@@ -454,7 +466,7 @@ describe('validateCreateInspection()', () => {
   })
 })
 
-describe('validateUpdateInspection', () => {
+describe('validateUpdateInspection()', () => {
   let inspectionBeingUpdated: Partial<UpdateInspectionPayload> = {}
 
   beforeEach(() => {
@@ -519,6 +531,15 @@ describe('validateUpdateInspection', () => {
     )
   })
 
+  it(`expiration - when updating, you can set the date to be one day from today`, async () => {
+    const { errors } = await validateUpdateInspection(
+      { expiration: getDateFromNow(1) },
+      inspectionBeingUpdated as UpdateInspectionPayload
+    )
+
+    expect(errors.expiration).toBeUndefined()
+  })
+
   it(`throws an error trying to update an existing value to an invalid format`, async () => {
     const { errors } = await validateUpdateInspection(
       { email: 'aa' },
@@ -535,5 +556,19 @@ describe('validateUpdateInspection', () => {
     )
 
     expect(errors.address1).toStrictEqual(VALIDATION_MESSAGES.GENERAL.TOO_SHORT)
+  })
+
+  it(`throws an error trying to update an inspection location with incorrect types`, async () => {
+    const { errors } = await validateUpdateInspection(
+      {
+        location: {
+          type: 'Point',
+          coordinates: ['1' as any] as any
+        }
+      },
+      inspectionBeingUpdated as UpdateInspectionPayload
+    )
+
+    expect(errors.location?.coordinates).toBeDefined()
   })
 })

@@ -13,16 +13,16 @@ import {
 } from '../constants'
 import { differenceInDays, getDateFromNow } from '../utils/dateUtils'
 import {
-  OptionalCreateSchema,
   InspectionFlyreelType,
   InspectionPolicyType,
   ValidCountry,
   OptionalUpdateSchema,
   CoreRequiredSchema,
   CoreOptionalSchema,
-  CoreInspectionSchema,
   CreateInspectionSchema,
-  UpdateInspectionSchema
+  UpdateInspectionSchema,
+  CreateMetaSchema,
+  CoreDateSchema
 } from '../types'
 import {
   checkOptionalString,
@@ -36,26 +36,6 @@ const requiredInspectionFieldsSchema: CoreRequiredSchema = Yup.object().shape({
     .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
     .trim()
     .min(2, VALIDATION_MESSAGES.GENERAL.TOO_SHORT),
-
-  carrier_expiration: Yup.date()
-    .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
-    .min(getDateFromNow(7), VALIDATION_MESSAGES.DATES.CARRIER_EXP_MIN)
-    .max(getDateFromNow(92), VALIDATION_MESSAGES.DATES.CARRIER_EXP_MAX)
-    .test(
-      'isGreaterThanTwoDaysDif',
-      VALIDATION_MESSAGES.DATES.DIFF_TOO_SMALL,
-      function(carrier_expiration) {
-        const expiration = this.parent.expiration as Date
-        const dif = differenceInDays(carrier_expiration, expiration)
-        return (
-          dif >= 2 ??
-          this.createError({
-            message: VALIDATION_MESSAGES.DATES.DIFF_TOO_SMALL,
-            path: this.path
-          })
-        )
-      }
-    ),
 
   city: Yup.string()
     .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
@@ -78,11 +58,6 @@ const requiredInspectionFieldsSchema: CoreRequiredSchema = Yup.object().shape({
     .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
     .trim()
     .email(VALIDATION_MESSAGES.EMAIL.INVALID_FORMAT),
-
-  expiration: Yup.date()
-    .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
-    .min(getDateFromNow(5), VALIDATION_MESSAGES.DATES.EXPIRATION_MIN)
-    .max(getDateFromNow(90), VALIDATION_MESSAGES.DATES.EXPIRATION_MAX),
 
   first_name: Yup.string()
     .trim()
@@ -141,6 +116,85 @@ const requiredInspectionFieldsSchema: CoreRequiredSchema = Yup.object().shape({
     })
 })
 
+export const optionalUpdateInspectionFields: OptionalUpdateSchema = Yup.object()
+  .shape({
+    location: Yup.object({
+      type: Yup.string().oneOf(
+        LOCATION_TYPES,
+        VALIDATION_MESSAGES.LOCATION_TYPE
+      ),
+      coordinates: Yup.array()
+        .length(2, VALIDATION_MESSAGES.REQUIRE_TWO_COORDINATES)
+        .of(Yup.number().required())
+        .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
+    }).optional()
+  })
+  .defined()
+
+export const createMetaFieldSchema: CreateMetaSchema = Yup.object()
+  .shape({
+    external_id: Yup.lazy(checkOptionalString),
+    forms: Yup.object().shape({
+      self_inspection_form_id: Yup.lazy(checkOptionalString),
+      self_inspection_internal_form: Yup.lazy(checkOptionalString),
+      inspection_form_id: Yup.lazy(checkOptionalString)
+    })
+  })
+  .defined()
+
+const createDateSchema: CoreDateSchema = Yup.object({
+  carrier_expiration: Yup.date()
+    .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
+    .min(getDateFromNow(7), VALIDATION_MESSAGES.DATES.CARRIER_EXP_MIN)
+    .max(getDateFromNow(92), VALIDATION_MESSAGES.DATES.CARRIER_EXP_MAX)
+    .test(
+      'isGreaterThanTwoDaysDif',
+      VALIDATION_MESSAGES.DATES.DIFF_TOO_SMALL,
+      function(carrier_expiration) {
+        const expiration = this.parent.expiration as Date
+        const dif = differenceInDays(carrier_expiration, expiration)
+        return (
+          dif >= 2 ??
+          this.createError({
+            message: VALIDATION_MESSAGES.DATES.DIFF_TOO_SMALL,
+            path: this.path
+          })
+        )
+      }
+    ),
+
+  expiration: Yup.date()
+    .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
+    .min(getDateFromNow(5), VALIDATION_MESSAGES.DATES.EXPIRATION_MIN)
+    .max(getDateFromNow(90), VALIDATION_MESSAGES.DATES.EXPIRATION_MAX)
+})
+
+const updateDateSchema: CoreDateSchema = Yup.object({
+  carrier_expiration: Yup.date()
+    .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
+    .max(getDateFromNow(92), VALIDATION_MESSAGES.DATES.CARRIER_EXP_MAX)
+    .test(
+      'isGreaterThanTwoDaysDif',
+      VALIDATION_MESSAGES.DATES.DIFF_TOO_SMALL,
+      function(carrier_expiration) {
+        const expiration = this.parent.expiration as Date
+        const dif = differenceInDays(carrier_expiration, expiration)
+        return (
+          dif >= 2 ??
+          this.createError({
+            message: VALIDATION_MESSAGES.DATES.DIFF_TOO_SMALL,
+            path: this.path
+          })
+        )
+      }
+    ),
+
+  expiration: Yup.date()
+    .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
+    .min(getDateFromNow(1))
+    .max(getDateFromNow(90), VALIDATION_MESSAGES.DATES.EXPIRATION_MAX)
+})
+
 export const optionalInspectionFieldsSchema: CoreOptionalSchema = Yup.object()
   .shape({
     address2: Yup.lazy(checkOptionalString),
@@ -157,54 +211,20 @@ export const optionalInspectionFieldsSchema: CoreOptionalSchema = Yup.object()
       .default(InspectionPolicyType.UNKOWN)
       .oneOf(FLYREEL_POLICY_TYPES, VALIDATION_MESSAGES.POLICY_TYPE),
     phone: Yup.lazy(checkOptionalPhone),
+    meta: createMetaFieldSchema,
     status: Yup.string()
       .lowercase()
       .oneOf(FLYREEL_INSPECTION_STATUSES, VALIDATION_MESSAGES.STATUS)
   })
   .defined()
 
-export const optionalUpdateInspectionFields: OptionalUpdateSchema = Yup.object()
-  .shape({
-    location: Yup.object({
-      type: Yup.string().oneOf(
-        LOCATION_TYPES,
-        VALIDATION_MESSAGES.LOCATION_TYPE
-      ),
-      coordinates: Yup.array()
-        .length(2, VALIDATION_MESSAGES.REQUIRE_TWO_COORDINATES)
-        .of(Yup.number().required())
-        .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
-    }).optional()
-  })
-  .optional()
-  .defined()
-
-export const metaFieldsCreateInspectionSchema: OptionalCreateSchema = Yup.object()
-  .shape({
-    meta: Yup.object()
-      .shape({
-        external_id: Yup.lazy(checkOptionalString),
-        forms: Yup.object()
-          .shape({
-            self_inspection_form_id: Yup.lazy(checkOptionalString),
-            self_inspection_internal_form: Yup.lazy(checkOptionalString),
-            inspection_form_id: Yup.lazy(checkOptionalString)
-          })
-          .defined()
-      })
-      .optional()
-  })
-  .optional()
-  .defined()
-
-export const coreInspectionValidationSchema: CoreInspectionSchema = Yup.object()
+export const createInspectionSchema: CreateInspectionSchema = Yup.object()
   .concat(requiredInspectionFieldsSchema)
+  .concat(createDateSchema)
   .concat(optionalInspectionFieldsSchema)
 
-export const createInspectionValidationSchema: CreateInspectionSchema = Yup.object()
-  .concat(coreInspectionValidationSchema)
-  .concat(metaFieldsCreateInspectionSchema)
-
 export const updateInspectionValidationSchema: UpdateInspectionSchema = Yup.object()
-  .concat(coreInspectionValidationSchema)
+  .concat(requiredInspectionFieldsSchema)
+  .concat(optionalInspectionFieldsSchema)
   .concat(optionalUpdateInspectionFields)
+  .concat(updateDateSchema)
