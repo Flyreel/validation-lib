@@ -1,6 +1,6 @@
 {
   "name": "@flyreel/validation-lib",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "module": "dist/flyreel-validation.esm.js",
   "main": "dist/index.js",
   "license": "MIT",
@@ -23,6 +23,7 @@
     "prepublishOnly": "yarn lint && yarn lint:types && yarn test && yarn build",
     "pub": "npm version patch --force && npm publish",
     "release": "yarn prepublishOnly && changeset publish",
+    "release-minor": "yarn prepublishOnly && npm version patch --force && changeset publish",
     "start": "tsdx watch",
     "test": "tsdx test",
     "test-all": "yarn lint && yarn type-check && yarn test",
