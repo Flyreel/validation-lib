@@ -117,7 +117,7 @@ export const CA_POSTAL_CODE_REGEX = new RegExp(
   /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][\s\-]?\d[ABCEGHJ-NPRSTV-Z]\d$/i
 )
 
-export const US_POSTAL_CODE_REGEX = new RegExp(/^\d{5}(-\d{4})?$/)
+export const US_POSTAL_CODE_REGEX = new RegExp(/^\^\d{5}$/)
 
 export const URL_REGEX = new RegExp(
   /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/

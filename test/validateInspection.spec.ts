@@ -464,6 +464,19 @@ describe('validateCreateInspection()', () => {
       VALIDATION_MESSAGES.ZIP_CODE.INVALID_CA_CODE
     )
   })
+
+  it('zip_code -  throws an error when there is there is a non 5 digit US zipcode', async () => {
+    const result = await validateCreateInspection({
+      state: 'TX',
+      zip_code: '75555-9093'
+    })
+
+    expect(result.isValid).toBe(false)
+
+    expect(result.errors.zip_code).toStrictEqual(
+      VALIDATION_MESSAGES.ZIP_CODE.INVALID_US_CODE
+    )
+  })
 })
 
 describe('validateUpdateInspection()', () => {
