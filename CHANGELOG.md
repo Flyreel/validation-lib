@@ -1,5 +1,11 @@
 # @flyreel/validation-lib
 
+## 0.4.0
+
+### Minor Changes
+
+- [`2a5ff46`](https://github.com/Flyreel/validation-lib/commit/2a5ff46b9e7b85cff4e83aa28850566547383870) Thanks [@akadop](https://github.com/akadop)! - update the zipcode validation for US to only accept 5 digit codes, rather than the 5+4
+
 ## 0.2.0
 
 ### Minor Changes
