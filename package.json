@@ -1,6 +1,6 @@
 {
   "name": "@flyreel/validation-lib",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "module": "dist/flyreel-validation.esm.js",
   "main": "dist/index.js",
   "license": "MIT",
