@@ -204,7 +204,7 @@ export const optionalInspectionFieldsSchema: CoreOptionalSchema = Yup.object()
       .oneOf(FLYREEL_TYPES, VALIDATION_MESSAGES.FLYREEL_TYPE),
     policy_type: Yup.string()
       .lowercase()
-      .default(InspectionPolicyType.UNKOWN)
+      .default(InspectionPolicyType.UNKNOWN)
       .oneOf(FLYREEL_POLICY_TYPES, VALIDATION_MESSAGES.POLICY_TYPE),
     phone: Yup.lazy(checkOptionalPhone),
     meta: createMetaFieldSchema,
