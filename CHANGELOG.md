@@ -1,5 +1,11 @@
 # @flyreel/validation-lib
 
+## 0.4.4
+
+### Patch Changes
+
+- [`f54e2b4`](https://github.com/Flyreel/validation-lib/commit/f54e2b4d64ab7406001266da37b3606e9dc8e564) Thanks [@akadop](https://github.com/akadop)! - fixed typo in enum, added unknown as a valid flyreel type
+
 ## 0.4.0
 
 ### Minor Changes
