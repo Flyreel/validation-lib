@@ -171,7 +171,7 @@ export const VALIDATION_MESSAGES = {
     REQUIRED: 'Required'
   },
   STATE: {
-    INVALID_CA_PROVINCE: `Must be one of ${CA_PROVINCES_ABBR}`,
-    INVALID_US_STATE: `Must be one of ${US_STATES_ABBR}`
+    INVALID_CA_PROVINCE: `Must be a valid Canadian Province`,
+    INVALID_US_STATE: `Must be a valid US State (abbreviated)`
   }
 }

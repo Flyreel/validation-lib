@@ -17,22 +17,10 @@ describe('validateCreateInspection()', () => {
     expect(errors.address1).toStrictEqual(VALIDATION_MESSAGES.GENERAL.REQUIRED)
   })
 
-  it(`address1 - throws an error when last name is less than 2 char`, async () => {
-    const { errors } = await validateCreateInspection({ address1: 'x' })
-
-    expect(errors.address1).toStrictEqual(VALIDATION_MESSAGES.GENERAL.TOO_SHORT)
-  })
-
   it(`address1 - throws an error when address1 is present as a blank string`, async () => {
     const { errors } = await validateCreateInspection({ address1: '' })
 
-    expect(errors.address1).toStrictEqual(VALIDATION_MESSAGES.GENERAL.TOO_SHORT)
-  })
-
-  it(`address2 - throws an error when address2 is present but less than 2 char`, async () => {
-    const { errors } = await validateCreateInspection({ address2: 'x' })
-
-    expect(errors.address2).toStrictEqual(VALIDATION_MESSAGES.GENERAL.TOO_SHORT)
+    expect(errors.address1).toStrictEqual(VALIDATION_MESSAGES.GENERAL.REQUIRED)
   })
 
   it(`address2 - does not throw an error when address2 is empty`, async () => {
@@ -67,14 +55,6 @@ describe('validateCreateInspection()', () => {
     const { errors } = await validateCreateInspection({})
 
     expect(errors.agent_email).toBeUndefined()
-  })
-
-  it(`agent_name - throws an error when agent_name is present but less than 2 char`, async () => {
-    const { errors } = await validateCreateInspection({ agent_name: '2' })
-
-    expect(errors.agent_name).toStrictEqual(
-      VALIDATION_MESSAGES.GENERAL.TOO_SHORT
-    )
   })
 
   it(`agent_name - does not throw an error when agent_name is an empty string`, async () => {
@@ -155,13 +135,7 @@ describe('validateCreateInspection()', () => {
   it(`city - throws an error when city is present as a blank string`, async () => {
     const { errors } = await validateCreateInspection({ city: '  ' })
 
-    expect(errors.city).toStrictEqual(VALIDATION_MESSAGES.GENERAL.TOO_SHORT)
-  })
-
-  it(`city - throws an error when city is present but less than 2 char`, async () => {
-    const { errors } = await validateCreateInspection({ city: 'x' })
-
-    expect(errors.city).toStrictEqual(VALIDATION_MESSAGES.GENERAL.TOO_SHORT)
+    expect(errors.city).toStrictEqual(VALIDATION_MESSAGES.GENERAL.REQUIRED)
   })
 
   it(`conversation - throws an error when there is a missing a conversation id`, async () => {
@@ -228,14 +202,6 @@ describe('validateCreateInspection()', () => {
     expect(errors.expiration).toStrictEqual(undefined)
   })
 
-  it(`first_name - throws an error when last name is less than 2 char`, async () => {
-    const { errors } = await validateCreateInspection({ first_name: 'x' })
-
-    expect(errors.first_name).toStrictEqual(
-      VALIDATION_MESSAGES.GENERAL.TOO_SHORT
-    )
-  })
-
   it(`first_name - throws an error when there is a missing a first_name`, async () => {
     const { errors } = await validateCreateInspection({})
 
@@ -256,14 +222,6 @@ describe('validateCreateInspection()', () => {
     const { errors } = await validateCreateInspection({ flyreel_type: 'test' })
 
     expect(errors.flyreel_type).toStrictEqual(VALIDATION_MESSAGES.FLYREEL_TYPE)
-  })
-
-  it(`last_name - throws an error when last name is less than 2 char`, async () => {
-    const { errors } = await validateCreateInspection({ last_name: 'x' })
-
-    expect(errors.last_name).toStrictEqual(
-      VALIDATION_MESSAGES.GENERAL.TOO_SHORT
-    )
   })
 
   it(`last_name - throws an error when there is a missing a last_name`, async () => {
@@ -568,7 +526,7 @@ describe('validateUpdateInspection()', () => {
       inspectionBeingUpdated as UpdateInspectionPayload
     )
 
-    expect(errors.address1).toStrictEqual(VALIDATION_MESSAGES.GENERAL.TOO_SHORT)
+    expect(errors.address1).toStrictEqual(VALIDATION_MESSAGES.GENERAL.REQUIRED)
   })
 
   it(`throws an error trying to update an inspection location with incorrect types`, async () => {

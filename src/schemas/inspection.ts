@@ -33,14 +33,12 @@ import {
 
 const requiredInspectionFieldsSchema: CoreRequiredSchema = Yup.object().shape({
   address1: Yup.string()
-    .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
     .trim()
-    .min(2, VALIDATION_MESSAGES.GENERAL.TOO_SHORT),
+    .required(VALIDATION_MESSAGES.GENERAL.REQUIRED),
 
   city: Yup.string()
-    .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
     .trim()
-    .min(2, VALIDATION_MESSAGES.GENERAL.TOO_SHORT),
+    .required(VALIDATION_MESSAGES.GENERAL.REQUIRED),
 
   country: Yup.string()
     .uppercase()
@@ -55,18 +53,16 @@ const requiredInspectionFieldsSchema: CoreRequiredSchema = Yup.object().shape({
     .matches(MONGOID_REGEX, VALIDATION_MESSAGES.MONGO_ID),
 
   email: Yup.string()
-    .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
     .trim()
+    .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
     .email(VALIDATION_MESSAGES.EMAIL.INVALID_FORMAT),
 
   first_name: Yup.string()
     .trim()
-    .min(2, VALIDATION_MESSAGES.GENERAL.TOO_SHORT)
     .required(VALIDATION_MESSAGES.GENERAL.REQUIRED),
 
   last_name: Yup.string()
     .trim()
-    .min(2, VALIDATION_MESSAGES.GENERAL.TOO_SHORT)
     .required(VALIDATION_MESSAGES.GENERAL.REQUIRED),
 
   policy_id: Yup.string()
