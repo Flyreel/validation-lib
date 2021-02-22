@@ -25,6 +25,7 @@ export const FLYREEL_INSPECTION_STATUSES = FLYREEL_STATUS.map(
 )
 
 export const FLYREEL_TYPES = [
+  InspectionFlyreelType.UNKNOWN,
   InspectionFlyreelType.INSPECTION,
   InspectionFlyreelType.HOME_REVIEW,
   InspectionFlyreelType.CLAIM
@@ -33,7 +34,7 @@ export const FLYREEL_TYPES = [
 export const FLYREEL_POLICY_TYPES = [
   InspectionPolicyType.NEW,
   InspectionPolicyType.RENEWAL,
-  InspectionPolicyType.UNKOWN
+  InspectionPolicyType.UNKNOWN
 ]
 
 export const US_STATES = [

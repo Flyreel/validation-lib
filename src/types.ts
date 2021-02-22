@@ -22,7 +22,7 @@ export enum InspectionFlyreelType {
 export enum InspectionPolicyType {
   NEW = 'new',
   RENEWAL = 'renewal',
-  UNKOWN = 'unknown'
+  UNKNOWN = 'unknown'
 }
 
 export enum InspectionStatus {
