@@ -126,6 +126,14 @@ describe('validateCreateInspection()', () => {
     )
   })
 
+  it(`carrier_expiration - does not throw an error when you are at the max amount of days`, async () => {
+    const { errors } = await validateCreateInspection({
+      carrier_expiration: getDateFromNow(367)
+    })
+
+    expect(errors.carrier_expiration).toBeUndefined()
+  })
+
   it(`city - throws an error when there is a missing a city`, async () => {
     const { errors } = await validateCreateInspection({})
 
@@ -182,6 +190,14 @@ describe('validateCreateInspection()', () => {
     expect(errors.expiration).toStrictEqual(
       VALIDATION_MESSAGES.DATES.EXPIRATION_MIN
     )
+  })
+
+  it(`expiration - does not throw an error when you are at the max amount of days`, async () => {
+    const { errors } = await validateCreateInspection({
+      expiration: getDateFromNow(365)
+    })
+
+    expect(errors.expiration).toBeUndefined()
   })
 
   it(`expiration - throws an error when expiration is more than 365 days away`, async () => {
