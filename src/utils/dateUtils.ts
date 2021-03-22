@@ -11,6 +11,7 @@ export function differenceInDays(
 ): number {
   const from = dayjs(earlierDate).startOf('d') ?? dayjs(new Date()).startOf('d')
   const dif = dayjs(laterDate)
+    .endOf('d')
     .utc()
     .diff(dayjs(from).utc(), 'd')
   return dif

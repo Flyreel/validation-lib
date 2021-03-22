@@ -126,6 +126,14 @@ describe('validateCreateInspection()', () => {
     )
   })
 
+  it(`carrier_expiration - does not throw an error when you are at the min amount of days`, async () => {
+    const { errors } = await validateCreateInspection({
+      carrier_expiration: getDateFromNow(7)
+    })
+
+    expect(errors.carrier_expiration).toBeUndefined()
+  })
+
   it(`carrier_expiration - does not throw an error when you are at the max amount of days`, async () => {
     const { errors } = await validateCreateInspection({
       carrier_expiration: getDateFromNow(367)
