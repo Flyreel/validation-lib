@@ -19,8 +19,7 @@ export function differenceInDays(
 
 export function getDateFromNow(numberOfDays: number): Date {
   const today = dayjs(new Date()).startOf('d')
-  const dateFromNow = dayjs(today)
-    .add(numberOfDays, 'd')
-    .endOf('d')
+  const dateFromNow = dayjs(today).add(numberOfDays, 'd')
+  console.log(dateFromNow)
   return dateFromNow.toDate()
 }
