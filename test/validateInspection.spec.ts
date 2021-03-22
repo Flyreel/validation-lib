@@ -95,7 +95,7 @@ describe('validateCreateInspection()', () => {
     )
   })
 
-  it(`carrier_expiration - throws no error when carrier expiration is between 7-92 days away`, async () => {
+  it(`carrier_expiration - throws no error when carrier expiration is between 7-367 days away`, async () => {
     const { errors } = await validateCreateInspection({
       expiration: getDateFromNow(75),
       carrier_expiration: getDateFromNow(91)
@@ -104,10 +104,10 @@ describe('validateCreateInspection()', () => {
     expect(errors.carrier_expiration).toStrictEqual(undefined)
   })
 
-  it(`carrier_expiration - throws an error when carrier expiration is more than 92 days away`, async () => {
+  it(`carrier_expiration - throws an error when carrier expiration is more than 367 days away`, async () => {
     const { errors } = await validateCreateInspection({
       expiration: getDateFromNow(75),
-      carrier_expiration: getDateFromNow(93)
+      carrier_expiration: getDateFromNow(368)
     })
 
     expect(errors.carrier_expiration).toStrictEqual(
@@ -184,9 +184,9 @@ describe('validateCreateInspection()', () => {
     )
   })
 
-  it(`expiration - throws an error when expiration is more than 90 days away`, async () => {
+  it(`expiration - throws an error when expiration is more than 365 days away`, async () => {
     const { errors } = await validateCreateInspection({
-      expiration: getDateFromNow(92)
+      expiration: getDateFromNow(366)
     })
 
     expect(errors.expiration).toStrictEqual(

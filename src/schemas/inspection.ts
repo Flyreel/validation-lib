@@ -142,7 +142,7 @@ const createDateSchema: CoreDateSchema = Yup.object({
   carrier_expiration: Yup.date()
     .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
     .min(getDateFromNow(7), VALIDATION_MESSAGES.DATES.CARRIER_EXP_MIN)
-    .max(getDateFromNow(92), VALIDATION_MESSAGES.DATES.CARRIER_EXP_MAX)
+    .max(getDateFromNow(367), VALIDATION_MESSAGES.DATES.CARRIER_EXP_MAX)
     .test(
       'isGreaterThanTwoDaysDif',
       VALIDATION_MESSAGES.DATES.DIFF_TOO_SMALL,
@@ -162,13 +162,13 @@ const createDateSchema: CoreDateSchema = Yup.object({
   expiration: Yup.date()
     .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
     .min(getDateFromNow(5), VALIDATION_MESSAGES.DATES.EXPIRATION_MIN)
-    .max(getDateFromNow(90), VALIDATION_MESSAGES.DATES.EXPIRATION_MAX)
+    .max(getDateFromNow(365), VALIDATION_MESSAGES.DATES.EXPIRATION_MAX)
 })
 
 const updateDateSchema: CoreDateSchema = Yup.object({
   carrier_expiration: Yup.date()
     .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
-    .max(getDateFromNow(92), VALIDATION_MESSAGES.DATES.CARRIER_EXP_MAX)
+    .max(getDateFromNow(367), VALIDATION_MESSAGES.DATES.CARRIER_EXP_MAX)
     .test(
       'isGreaterThanTwoDaysDif',
       VALIDATION_MESSAGES.DATES.DIFF_TOO_SMALL,
@@ -188,7 +188,7 @@ const updateDateSchema: CoreDateSchema = Yup.object({
   expiration: Yup.date()
     .required(VALIDATION_MESSAGES.GENERAL.REQUIRED)
     .min(getDateFromNow(1))
-    .max(getDateFromNow(90), VALIDATION_MESSAGES.DATES.EXPIRATION_MAX)
+    .max(getDateFromNow(365), VALIDATION_MESSAGES.DATES.EXPIRATION_MAX)
 })
 
 export const optionalInspectionFieldsSchema: CoreOptionalSchema = Yup.object()

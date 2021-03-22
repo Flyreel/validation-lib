@@ -149,13 +149,13 @@ export const VALIDATION_MESSAGES = {
   MONGO_ID: 'Invalid Mongo Object ID format',
   DATES: {
     CARRIER_EXP_MAX:
-      'Carrier Expiration date cannot be more than 92 days from now',
+      'Carrier Expiration date cannot be more than 367 days from now',
     CARRIER_EXP_MIN: 'Carrier Expiration date must be at least a week from now',
     EXPIRATION_EDIT_CREATED:
       'Expiration date cannot be set before the day this inspection was created',
     EXPIRATION_AFTER_TODAY: 'Expiration date must be after today',
     EXPIRATION_MIN: 'Expiration date must be at least 5 days from now',
-    EXPIRATION_MAX: 'Expiration date cannot be more than 90 days from now',
+    EXPIRATION_MAX: 'Expiration date cannot be more than 365 days from now',
     DIFF_TOO_SMALL:
       'Carrier Expiration must be at least 2 days after the Expiration'
   },
