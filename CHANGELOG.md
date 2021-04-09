@@ -1,5 +1,15 @@
 # @flyreel/validation-lib
 
+## 0.4.10
+
+### Patch Changes
+
+- [`c67e15f`](https://github.com/Flyreel/validation-lib/commit/c67e15ff4e26749411d657adbeddf3dd2617a421) Thanks [@akadop](https://github.com/akadop)! - add canadian territories to list of CA states
+
+* [`673b800`](https://github.com/Flyreel/validation-lib/commit/673b800a6d4e6d191eea26ea71fb19e5014b1a84) [#8](https://github.com/Flyreel/validation-lib/pull/8) Thanks [@akadop](https://github.com/akadop)! - change logic to use end of day to calc max date
+
+- [`673b800`](https://github.com/Flyreel/validation-lib/commit/673b800a6d4e6d191eea26ea71fb19e5014b1a84) [#8](https://github.com/Flyreel/validation-lib/pull/8) Thanks [@akadop](https://github.com/akadop)! - max dates for expiration and carrier expiration have been changed from 90-> 365 and 92->367
+
 ## 0.4.4
 
 ### Patch Changes
