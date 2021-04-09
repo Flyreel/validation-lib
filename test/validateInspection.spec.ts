@@ -379,6 +379,33 @@ describe('validateCreateInspection()', () => {
     expect(errors.state).toStrictEqual(VALIDATION_MESSAGES.GENERAL.REQUIRED)
   })
 
+  it(`state - accepts the canadian territory NU when country is set to CA `, async () => {
+    const { errors } = await validateCreateInspection({
+      country: 'CA',
+      state: 'NU'
+    })
+
+    expect(errors.state).toBeUndefined()
+  })
+
+  it(`state - accepts the canadian territory YT when country is set to CA `, async () => {
+    const { errors } = await validateCreateInspection({
+      country: 'CA',
+      state: 'YT'
+    })
+
+    expect(errors.state).toBeUndefined()
+  })
+
+  it(`state - accepts the canadian territory NT when country is set to CA `, async () => {
+    const { errors } = await validateCreateInspection({
+      country: 'CA',
+      state: 'NT'
+    })
+
+    expect(errors.state).toBeUndefined()
+  })
+
   it(`state - throws an error when there is an unrecognized state, defaulting to US country`, async () => {
     const { errors } = await validateCreateInspection({ state: 'x' as any })
 
